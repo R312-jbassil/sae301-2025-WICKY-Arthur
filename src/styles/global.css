@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+    name: "sae";
+    default: yes;
+    prefersdark: false;
+    color-scheme: "dark";
+    --color-base-100: #F0F0F0;
+    --color-base-200: oklch(0.980 0.000 265.8);
+    --color-base-300: oklch(0.950 0.000 260.0);
+    --color-base-content: #2c2a2a;
+    --color-primary: #70d7e7;
+    --color-primary-content: oklch(25% 0.09 281.288);
+    --color-secondary: oklch(67% 0.182 276.935);
+    --color-secondary-content: oklch(25% 0.09 281.288);
+    --color-accent: oklch(0% 0 0);
+    --color-accent-content: oklch(100% 0 0);
+    --color-neutral: oklch(12% 0.042 264.695);
+    --color-neutral-content: oklch(98% 0.003 247.858);
+    --color-info: oklch(74% 0.16 232.661);
+    --color-info-content: oklch(29% 0.066 243.157);
+    --color-success: oklch(79% 0.209 151.711);
+    --color-success-content: oklch(26% 0.065 152.934);
+    --color-warning: oklch(85% 0.199 91.936);
+    --color-warning-content: oklch(28% 0.066 53.813);
+    --color-error: oklch(71% 0.194 13.428);
+    --color-error-content: oklch(27% 0.105 12.094);
+    --radius-selector: 1rem;
+    --radius-field: 2rem;
+    --radius-box: 2rem;
+    --size-selector: 0.25rem;
+    --size-field: 0.25rem;
+    --border: 1.5px;
+    --depth: 1;
+    --noise: 0;
+}
+
+.font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.font-montserrat-alt {
+    font-family: 'Montserrat Alternates', sans-serif;
+}
