@@ -1,0 +1,122 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/header.astro";
+if (Astro.locals.user) {
+    // Si l'utilisateur est déjà connecté, on le redirige vers la page d'accueil
+    return Astro.redirect("/");
+}
+---
+
+<Layout>
+    <Header />
+    <div class="flex flex-col items-center pt-2">
+        <form
+            id="loginForm"
+            class="w-full max-w-md mx-auto flex flex-col gap-2 p-8"
+        >
+            <h1 class="text-3xl font-normal text-left font-montserrat">
+                SE CONNECTER
+            </h1>
+            <p class="mb-2 text-base text-gray-700 text-left">
+                Connectez-vous avec vos informations de compte
+            </p>
+            <div class="flex flex-col gap-6 mt-6">
+                <label class="block">
+                    <span class="text-black text-base font-normal"
+                        >Adresse email</span
+                    >
+                    <input
+                        name="email"
+                        type="email"
+                        required
+                        placeholder="Email"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
+                    />
+                </label>
+                <label class="block">
+                    <span class="text-black text-base font-normal"
+                        >Mot de passe</span
+                    >
+                    <input
+                        name="password"
+                        type="password"
+                        required
+                        placeholder="Mot de passe"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
+                    />
+                </label>
+            </div>
+            <button
+                type="submit"
+                class="mt-8 btn w-full bg-cyan-300 hover:bg-cyan-400 border-0 rounded-none font-montserrat text-white text-base tracking-wide"
+            >
+                SE CONNECTER
+            </button>
+            <p id="status" class="mt-2 text-center text-red-500"></p>
+            <div class="mt-2 text-center text-base">
+                Vous n’êtes pas encore membre ?
+                <a href="/signup" class="underline ml-2">CRÉEZ VOUS UN COMPTE</a
+                >
+            </div>
+            <button
+                type="button"
+                id="googlelogin"
+                class="btn w-full bg-white border border-gray-300 shadow-sm hover:bg-gray-100 text-black flex items-center gap-2 mt-3"
+            >
+                <img
+                    src="/src/assets/images/google.svg"
+                    alt="Google"
+                    class="h-5 w-5"
+                />
+                Se connecter avec Google
+            </button>
+        </form>
+    </div>
+</Layout>
+<script>
+    //@ts-nocheck
+    // On retire toute ancienne information utilisateur du stockage local
+    localStorage.removeItem("user");
+    const form = document.getElementById("loginForm");
+    const status = document.getElementById("status");
+
+    // Gestion de la soumission du formulaire
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        // Envoi des informations au serveur via l'API /api/login
+        const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: formData.get("email"),
+                password: formData.get("password"),
+            }),
+            credentials: "include", // Permet d'inclure les cookies dans la requête
+        });
+
+        // Traitement de la réponse
+        if (res.ok) {
+            const resData = await res.json();
+            localStorage.setItem("user", JSON.stringify(resData.user)); // Sauvegarde des infos utilisateur
+            status.textContent =
+                document.documentElement.lang === "fr"
+                    ? "✅ Connexion réussie !"
+                    : "✅ Login successful!";
+            // Redirection vers la page d'accueil après un court délai
+            window.location.href = "/";
+        } else {
+            status.textContent =
+                document.documentElement.lang === "fr"
+                    ? "❌ Email ou mot de passe invalide"
+                    : "❌ Invalid email or password";
+        }
+    });
+    // Gestion du bouton Google
+    const googlelogin = document.getElementById("googlelogin");
+    googlelogin.onclick = async () => {
+        // Ici, tu peux déclencher le flow OAuth côté serveur, ou simplement retourner window.location vers l'URL d'auth Google
+        window.location.href = "/api/login/google";
+    };
+</script>
