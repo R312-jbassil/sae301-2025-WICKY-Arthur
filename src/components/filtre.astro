@@ -1,0 +1,21 @@
+---
+const { actif } = Astro.props;
+const options = [
+    { label: "Toutes", value: "toutes" },
+    { label: "Bases", value: "base" },
+    { label: "Générées par IA", value: "ia" },
+];
+---
+
+<div class="flex gap-4 px-8 my-4">
+    {
+        options.map((opt) => (
+            <a
+                href={`?filtre=${opt.value}`}
+                class={`font-montserrat text-sm btn btn-primary btn-sm min-w-[120px] min-h-[42px] ${actif === opt.value ? "btn-primary text-white" : ""}`}
+            >
+                {opt.label}
+            </a>
+        ))
+    }
+</div>
