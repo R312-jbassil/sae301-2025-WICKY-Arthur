@@ -7,17 +7,32 @@ import pb from "../../../utils/pb.ts";
 
 const url = new URL(Astro.url);
 const typeFiltre = url.searchParams.get("filtre") ?? "toutes";
+const user = Astro.locals.user;
 
 let records = [];
 
 if (typeFiltre === "toutes") {
+    // Récupère toutes les lunettes des deux collections
     const modelesBase = await pb.collection("modeles").getFullList();
     const modelesIA = await pb.collection("ModeleIa").getFullList();
     records = [...modelesBase, ...modelesIA];
 } else if (typeFiltre === "base") {
+    // Uniquement les modèles de base
     records = await pb.collection("modeles").getFullList();
 } else if (typeFiltre === "ia") {
+    // Uniquement les modèles générés par IA
     records = await pb.collection("ModeleIa").getFullList();
+} else if (typeFiltre === "mes-creations") {
+    // Uniquement les modèles de l'utilisateur connecté
+    if (user) {
+        const filter = `user = "${user.id}"`;
+        records = await pb.collection("modeles").getFullList({
+            filter: filter,
+        });
+    } else {
+        // Si pas connecté, redirige vers la page de connexion
+        return Astro.redirect("/login");
+    }
 }
 ---
 
@@ -29,22 +44,32 @@ if (typeFiltre === "toutes") {
         Nos Modèles de Lunettes
     </h1>
     <div class="pb-8 sm:pb-16">
-        <FiltreLunettes actif={typeFiltre} />
+        <FiltreLunettes actif={typeFiltre} user={user} />
     </div>
     <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 pb-8"
     >
         {
-            records.map((record) => (
-                <Card
-                    id={record.id}
-                    nom={record.nom}
-                    prix={record.prix || 0}
-                    ancien_prix={record.ancien_prix || 0}
-                    fabrication_fr={record.fabrication_fr || "non"}
-                    code_svg={record.code_svg}
-                />
-            ))
+            records.length > 0 ? (
+                records.map((record) => (
+                    <Card
+                        id={record.id}
+                        nom={record.nom}
+                        prix={record.prix || 0}
+                        ancien_prix={record.ancien_prix || 0}
+                        fabrication_fr={record.fabrication_fr || "non"}
+                        code_svg={record.code_svg}
+                    />
+                ))
+            ) : (
+                <div class="col-span-full text-center py-12">
+                    <p class="text-lg text-gray-600">
+                        {typeFiltre === "mes-creations"
+                            ? "Vous n'avez pas encore créé de lunettes personnalisées"
+                            : "Aucun modèle trouvé"}
+                    </p>
+                </div>
+            )
         }
     </div>
 </Layout>
