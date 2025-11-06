@@ -25,9 +25,7 @@ const { id, nom, prix, ancien_prix, fabrication_fr, code_svg } = Astro.props;
                         />
                     )
                 }
-                <a
-                    class="text-lg"
-                    href={`/personnaliser/${encodeURIComponent(id)}`}
+                <a class="text-lg" href={`/galerie/${encodeURIComponent(id)}`}
                     >Personnaliser →</a
                 >
             </div>

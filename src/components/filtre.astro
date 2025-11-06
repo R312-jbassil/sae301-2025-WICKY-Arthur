@@ -2,7 +2,7 @@
 const { actif } = Astro.props;
 const options = [
     { label: "Toutes", value: "toutes" },
-    { label: "Bases", value: "base" },
+    { label: "Modèles de base", value: "base" },
     { label: "Générées par IA", value: "ia" },
 ];
 ---
@@ -12,7 +12,11 @@ const options = [
         options.map((opt) => (
             <a
                 href={`?filtre=${opt.value}`}
-                class={`font-montserrat text-sm btn btn-primary btn-sm min-w-[120px] min-h-[42px] ${actif === opt.value ? "btn-primary text-white" : ""}`}
+                class={`font-montserrat text-sm btn btn-sm min-w-[140px] min-h-[42px] ${
+                    actif === opt.value
+                        ? "btn-primary text-white"
+                        : "btn-outline"
+                }`}
             >
                 {opt.label}
             </a>

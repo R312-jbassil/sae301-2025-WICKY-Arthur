@@ -1,0 +1,401 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Header from "../../components/header.astro";
+import pb from "../../../utils/pb.ts";
+
+const { id } = Astro.params;
+const lunette = await pb.collection("modeles").getOne(id);
+---
+
+<Layout>
+    <Header />
+    <main class="container mx-auto px-4 py-8">
+        <a href="/galerie" class="flex items-center gap-2 mb-4 text-lg">
+            ← Retour à la galerie
+        </a>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Colonne gauche : Prévisualisation SVG -->
+            <div class="flex flex-col items-center">
+                <h2 class="text-3xl font-bold mb-4">{lunette.nom}</h2>
+                <p class="text-2xl mb-6">{lunette.prix}€</p>
+                <div id="svg-preview" class="w-full max-w-lg">
+                    <div set:html={lunette.code_svg} />
+                </div>
+
+                <!-- Badge fabrication française -->
+                {
+                    lunette.fabrication_fr === "oui" && (
+                        <div class="mt-4 flex items-center gap-2">
+                            <img
+                                src="/src/assets/images/france_flag.svg"
+                                alt="Fabriqué en France"
+                                class="h-6"
+                            />
+                            <span>Fabriqué en France</span>
+                        </div>
+                    )
+                }
+            </div>
+
+            <!-- Colonne droite : Customisation -->
+            <div class="flex flex-col">
+                <h2 class="text-3xl font-bold mb-4">{lunette.nom}</h2>
+
+                <!-- Description si elle existe -->
+                {
+                    lunette.description && (
+                        <div class="mb-6">
+                            <h3 class="text-xl font-semibold mb-2 border-b-2 border-cyan-400 inline-block pb-1">
+                                Description du modèle
+                            </h3>
+                            <p class="mt-2">{lunette.description}</p>
+                        </div>
+                    )
+                }
+
+                <!-- Section Customisation -->
+                <div class="mb-6">
+                    <h3
+                        class="text-xl font-semibold mb-4 border-b-2 border-cyan-400 inline-block pb-1"
+                    >
+                        Customisation
+                    </h3>
+
+                    <!-- Onglets -->
+                    <div class="flex gap-2 mt-4">
+                        <button id="btn-verres" class="btn btn-primary"
+                            >Verres</button
+                        >
+                        <button
+                            id="btn-monture"
+                            class="btn btn-outline btn-primary">Monture</button
+                        >
+                        <button
+                            id="btn-branches"
+                            class="btn btn-outline btn-primary">Branches</button
+                        >
+                    </div>
+
+                    <!-- Palettes de couleurs -->
+                    <div id="palette-verres" class="mt-6">
+                        <h4 class="text-lg font-semibold mb-3">Verres</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="verres"
+                                data-color="#302C2C"
+                                style="background-color: rgba(48, 44, 44, 0.67);"
+                            ></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="verres"
+                                data-color="#FFFFFF"
+                                style="background-color: rgba(255, 255, 255, 0.4);"
+                            ></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="verres"
+                                data-color="#397105"
+                                style="background-color: rgba(57, 113, 5, 0.67);"
+                            ></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="verres"
+                                data-color="#263DB1"
+                                style="background-color: rgba(38, 61, 177, 0.67);"
+                            ></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="verres"
+                                data-color="#B23232"
+                                style="background-color: rgba(178, 50, 50, 0.67);"
+                            ></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="verres"
+                                data-color="#C98B28"
+                                style="background-color: rgba(201, 139, 40, 0.67);"
+                            ></button>
+                        </div>
+                    </div>
+
+                    <div id="palette-monture" class="mt-6 hidden">
+                        <h4 class="text-lg font-semibold mb-3">Monture</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#FFFFFF"
+                                style="background-color: #FFFFFF;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#171515"
+                                style="background-color: #171515;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#FF2222"
+                                style="background-color: #FF2222;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#3942ED"
+                                style="background-color: #3942ED;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#753A03"
+                                style="background-color: #753A03;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#036310"
+                                style="background-color: #036310;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#1FCB47"
+                                style="background-color: #1FCB47;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#FAF13F"
+                                style="background-color: #FAF13F;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#910EB1"
+                                style="background-color: #910EB1;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#E18D05"
+                                style="background-color: #E18D05;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="monture"
+                                data-color="#E609C5"
+                                style="background-color: #E609C5;"></button>
+                        </div>
+                    </div>
+
+                    <div id="palette-branches" class="mt-6 hidden">
+                        <h4 class="text-lg font-semibold mb-3">Branches</h4>
+                        <div class="flex flex-wrap gap-3">
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#FFFFFF"
+                                style="background-color: #FFFFFF;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#171515"
+                                style="background-color: #171515;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#FF2222"
+                                style="background-color: #FF2222;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#3942ED"
+                                style="background-color: #3942ED;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#753A03"
+                                style="background-color: #753A03;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#036310"
+                                style="background-color: #036310;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#1FCB47"
+                                style="background-color: #1FCB47;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#FAF13F"
+                                style="background-color: #FAF13F;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#910EB1"
+                                style="background-color: #910EB1;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#E18D05"
+                                style="background-color: #E18D05;"></button>
+                            <button
+                                class="color-btn w-12 h-12 rounded-full border-2 border-gray-300 hover:scale-110 transition"
+                                data-part="branches"
+                                data-color="#E609C5"
+                                style="background-color: #E609C5;"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex flex-col gap-3 mt-6">
+                    <button id="btn-save" class="btn btn-primary w-full">
+                        Sauvegarder
+                    </button>
+                    <button id="btn-cart" class="btn btn-accent w-full">
+                        Ajouter au panier
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Sauvegarde -->
+    <dialog id="modal-save" class="modal">
+        <div class="modal-box bg-cyan-400 text-white">
+            <h3 class="font-bold text-lg text-center mb-4">
+                Donnez un nom à vos nouvelles lunettes
+            </h3>
+            <input
+                type="text"
+                id="new-name"
+                placeholder="Nom des lunettes"
+                class="input input-bordered w-full mb-4 text-black"
+            />
+            <div class="flex flex-col gap-2">
+                <button
+                    id="confirm-save"
+                    class="btn bg-black text-white border-0 hover:bg-gray-800"
+                    >Ajouter</button
+                >
+                <button
+                    class="btn bg-black text-white border-0 hover:bg-gray-800"
+                    onclick="document.getElementById('modal-save').close()"
+                    >Annuler</button
+                >
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Modal Panier -->
+    <dialog id="modal-cart" class="modal">
+        <div class="modal-box bg-cyan-400 text-white">
+            <h3 class="font-bold text-lg text-center mb-4">
+                Donnez un nom à vos nouvelles lunettes
+            </h3>
+            <input
+                type="text"
+                placeholder="Nom des lunettes"
+                class="input input-bordered w-full mb-4 text-black"
+            />
+            <div class="flex flex-col gap-2">
+                <button
+                    class="btn bg-black text-white border-0 hover:bg-gray-800"
+                    >Ajouter au panier</button
+                >
+                <button
+                    class="btn bg-black text-white border-0 hover:bg-gray-800"
+                    onclick="document.getElementById('modal-cart').close()"
+                    >Annuler</button
+                >
+            </div>
+        </div>
+    </dialog>
+</Layout>
+<script define:vars={{ lunetteData: lunette }}>
+    // Gestion des onglets
+    const btnVerres = document.getElementById("btn-verres");
+    const btnMonture = document.getElementById("btn-monture");
+    const btnBranches = document.getElementById("btn-branches");
+    const paletteVerres = document.getElementById("palette-verres");
+    const paletteMonture = document.getElementById("palette-monture");
+    const paletteBranches = document.getElementById("palette-branches");
+
+    function showPalette(palette) {
+        [paletteVerres, paletteMonture, paletteBranches].forEach((p) =>
+            p.classList.add("hidden"),
+        );
+        [btnVerres, btnMonture, btnBranches].forEach((b) => {
+            b.classList.remove("btn-primary");
+            b.classList.add("btn-outline", "btn-primary");
+        });
+        palette.element.classList.remove("hidden");
+        palette.button.classList.add("btn-primary");
+        palette.button.classList.remove("btn-outline");
+    }
+
+    btnVerres.addEventListener("click", () =>
+        showPalette({ element: paletteVerres, button: btnVerres }),
+    );
+    btnMonture.addEventListener("click", () =>
+        showPalette({ element: paletteMonture, button: btnMonture }),
+    );
+    btnBranches.addEventListener("click", () =>
+        showPalette({ element: paletteBranches, button: btnBranches }),
+    );
+
+    // Gestion des couleurs
+    document.querySelectorAll(".color-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const part = btn.dataset.part;
+            const color = btn.dataset.color;
+            const svgElements = document.querySelectorAll(
+                `#svg-preview [id="${part}"]`,
+            );
+            svgElements.forEach((el) => el.setAttribute("fill", color));
+        });
+    });
+
+    // Bouton Sauvegarder
+    document.getElementById("btn-save").addEventListener("click", () => {
+        document.getElementById("modal-save").showModal();
+    });
+
+    // Confirmation sauvegarde
+    document
+        .getElementById("confirm-save")
+        .addEventListener("click", async () => {
+            const newName = document.getElementById("new-name").value;
+            if (!newName) {
+                alert("Veuillez entrer un nom");
+                return;
+            }
+
+            const svgContainer = document.getElementById("svg-preview");
+            const newSvg = svgContainer.innerHTML;
+
+            const data = {
+                ...lunetteData,
+                nom: newName,
+                code_svg: newSvg,
+            };
+
+            try {
+                const res = await fetch("/api/saveGlasses", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+
+                if (res.ok) {
+                    alert("Lunettes sauvegardées !");
+                    document.getElementById("modal-save").close();
+                    window.location.href = "/galerie";
+                }
+            } catch (err) {
+                alert("Erreur lors de la sauvegarde");
+                console.error(err);
+            }
+        });
+
+    // Bouton Panier
+    document.getElementById("btn-cart").addEventListener("click", () => {
+        document.getElementById("modal-cart").showModal();
+    });
+</script>
