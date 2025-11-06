@@ -1,5 +1,5 @@
 import { defineMiddleware } from "astro:middleware";
-import pb from "./utils/pb";
+import pb from "../../utils/pb";
 
 export const onRequest = defineMiddleware(async ({ cookies, locals }, next) => {
     const authCookie = cookies.get("pb_auth");

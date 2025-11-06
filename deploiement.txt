@@ -1,0 +1,7 @@
+url : tavue.arthurwicky.fr
+admin pocketbase : 
+id : wickyarthur@gmail.com
+mdp : Bombastica!12
+
+J'ai reussi à héberger le pocketbase et à générer le dist mais au moment de le copier sur le vps je ne sais pas pourquoi cela ne marche pas.
+
