@@ -1,5 +1,5 @@
-import pb from "../../utils/pb";
-import { Collections } from "../../utils/pocketbase-types";
+import pb from "../../../utils/pb";
+import { Collections } from "../../../utils/pocketbase-types";
 
 
 export const POST = async ({ cookies }) => {

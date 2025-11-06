@@ -4,10 +4,10 @@ import Layout from "../../layouts/Layout.astro";
 import Header from "../../components/header.astro";
 import PocketBase from "pocketbase";
 import Card from "../../components/card.astro";
+import pb from "../../../utils/pb.ts";
 
 const url = new URL(Astro.url);
 const typeFiltre = url.searchParams.get("filtre") ?? "toutes";
-const pb = new PocketBase("http://127.0.0.1:8090");
 let records;
 if (typeFiltre !== "toutes") {
     records = await pb.collection("modeles").getFullList({
@@ -18,21 +18,22 @@ if (typeFiltre !== "toutes") {
 }
 ---
 
-<Layout />
-<Header />
-<h1 class="text-3xl p-8 pb-4">Nos Modèles de Lunettes</h1>
-<div class="pb-16"><FiltreLunettes actif={typeFiltre} /></div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    {
-        records.map((record) => (
-            <Card
-                id={record.id}
-                nom={record.nom}
-                prix={record.prix}
-                ancien_prix={record.ancien_prix}
-                fabrication_fr={record.fabrication_fr}
-                code_svg={record.code_svg}
-            />
-        ))
-    }
-</div>
+<Layout>
+    <Header />
+    <h1 class="text-3xl p-8 pb-4">Nos Modèles de Lunettes</h1>
+    <div class="pb-16"><FiltreLunettes actif={typeFiltre} /></div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {
+            records.map((record) => (
+                <Card
+                    id={record.id}
+                    nom={record.nom}
+                    prix={record.prix}
+                    ancien_prix={record.ancien_prix}
+                    fabrication_fr={record.fabrication_fr}
+                    code_svg={record.code_svg}
+                />
+            ))
+        }
+    </div>
+</Layout>

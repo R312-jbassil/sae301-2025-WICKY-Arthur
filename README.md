@@ -1,4 +1,4 @@
-- Nom:
-- Prénom:
-- URL pocketbase: 
-- URL:
+- Nom: Wicky
+- Prénom: Arthur
+- URL pocketbase: https://tavue.arthurwicky.fr/_/
+- URL: https://tavue.arthurwicky.fr
