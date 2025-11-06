@@ -2,32 +2,41 @@
 const { id, nom, prix, ancien_prix, fabrication_fr, code_svg } = Astro.props;
 ---
 
-<div class="card ...">
-    <figure><div set:html={code_svg} /></figure>
-    <div class="card-body">
-        <h2 class="text-2xl">{nom}</h2>
-        <div class="flex justify-between">
-            <div>
+<div class="card bg-base-100 shadow-xl">
+    <figure class="px-4 pt-4">
+        <div set:html={code_svg} class="w-full h-auto" />
+    </figure>
+    <div class="card-body p-4 sm:p-6">
+        <h2 class="text-xl sm:text-2xl font-bold">{nom}</h2>
+        <div
+            class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2"
+        >
+            <div class="flex items-center gap-2">
                 {
                     ancien_prix > 0 && (
-                        <span class="line-through">{ancien_prix}€</span>
+                        <span class="line-through text-gray-500 text-sm sm:text-base">
+                            {ancien_prix}€
+                        </span>
                     )
                 }
-                <span class="text-xl">{prix}€</span>
+                <span class="text-lg sm:text-xl font-semibold">{prix}€</span>
             </div>
-            <div class="flex gap-3">
+            <div class="flex items-center gap-3">
                 {
                     fabrication_fr === "oui" && (
                         <img
-                            class="w-1/8"
+                            class="h-5 w-auto"
                             src="/src/assets/images/france_flag.svg"
                             alt="FR"
                         />
                     )
                 }
-                <a class="text-lg" href={`/galerie/${encodeURIComponent(id)}`}
-                    >Personnaliser →</a
+                <a
+                    class="text-sm sm:text-base hover:underline"
+                    href={`/galerie/${encodeURIComponent(id)}`}
                 >
+                    Personnaliser →
+                </a>
             </div>
         </div>
     </div>

@@ -6,22 +6,30 @@ import Button from "../components/bouton.astro";
 
 <Layout>
 	<Header />
-	<main class="flex items-center py-16">
-		<div class="pt-8 z-2 flex flex-col gap-6 w-8/25">
-			<img src="/src/assets/images/logo.svg" alt="" />
-			<p class="text-lg text-gray-600 mb-6 font-montserrat-alt">
+	<main class="flex flex-col lg:flex-row items-center py-8 lg:py-16">
+		<div
+			class="z-2 flex flex-col gap-4 sm:gap-6 w-full lg:w-8/25 px-4 sm:px-0 lg:pt-16 text-center lg:text-left"
+		>
+			<img
+				src="/src/assets/images/logo.svg"
+				alt="Logo"
+				class="w-3/4 sm:w-full mx-auto lg:mx-0 max-w-md"
+			/>
+			<p
+				class="text-base sm:text-lg text-gray-600 mb-4 sm:mb-6 font-montserrat-alt"
+			>
 				Créez vos lunettes sur mesure, parfaitement adaptées à votre
 				style unique
 			</p>
-			<a href="/galerie">
+			<a href="/galerie" class="mx-auto lg:mx-0">
 				<Button
 					class="text-base-200"
 					text="Commencer à Personnaliser"
-				/></a
-			>
+				/>
+			</a>
 		</div>
 		<div
-			class="bg-[url('src/assets/images/imagefond_homepage.avif')] bg-cover bg-center min-h-screen absolute top-0 left-0 w-full h-full"
+			class="bg-[url('src/assets/images/imagefond_homepage.avif')] bg-cover bg-center min-h-screen absolute top-0 left-0 w-full h-full "
 		>
 		</div>
 	</main>

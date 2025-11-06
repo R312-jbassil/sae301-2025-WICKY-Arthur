@@ -1,40 +1,48 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/header.astro";
+
+// Redirige si l'utilisateur est déjà connecté
+if (Astro.locals.user) {
+    return Astro.redirect("/");
+}
 ---
 
 <Layout>
     <Header />
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center pt-8">
         <form
             id="registerForm"
-            class="w-full max-w-md mx-auto flex flex-col gap-0"
+            class="w-full max-w-md mx-auto flex flex-col gap-2 p-8"
         >
-            <h1
-                class="text-3xl font-normal mb-3 text-center font-montserrat text-cyan-400"
-            >
+            <h1 class="text-3xl font-normal text-center font-montserrat mb-6">
                 CRÉER UN COMPTE
             </h1>
-            <div class="flex flex-col gap-2">
-                <label class="block mt-6">
+
+            <div class="flex flex-col gap-6">
+                <label class="block">
                     <span class="text-black text-base font-normal">Prénom</span>
                     <input
                         name="prenom"
                         type="text"
                         required
-                        class="block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 text-black"
+                        placeholder="Votre prénom"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
                     />
                 </label>
-                <label class="block mt-3">
+
+                <label class="block">
                     <span class="text-black text-base font-normal">Nom</span>
                     <input
                         name="nom"
                         type="text"
                         required
-                        class="block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 text-black"
+                        placeholder="Votre nom"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
                     />
                 </label>
-                <label class="block mt-3">
+
+                <label class="block">
                     <span class="text-black text-base font-normal"
                         >Adresse email</span
                     >
@@ -42,10 +50,12 @@ import Header from "../components/header.astro";
                         name="email"
                         type="email"
                         required
-                        class="block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 text-black"
+                        placeholder="votre.email@exemple.com"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
                     />
                 </label>
-                <label class="block mt-3">
+
+                <label class="block">
                     <span class="text-black text-base font-normal"
                         >Mot de passe</span
                     >
@@ -53,10 +63,13 @@ import Header from "../components/header.astro";
                         name="password"
                         type="password"
                         required
-                        class="block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 text-black"
+                        minlength="8"
+                        placeholder="Minimum 8 caractères"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
                     />
                 </label>
-                <label class="block mt-3">
+
+                <label class="block">
                     <span class="text-black text-base font-normal"
                         >Confirmer le mot de passe</span
                     >
@@ -64,58 +77,100 @@ import Header from "../components/header.astro";
                         name="confirm_password"
                         type="password"
                         required
-                        class="block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 text-black"
+                        minlength="8"
+                        placeholder="Retapez votre mot de passe"
+                        class="mt-2 block w-full border-b border-gray-400 focus:outline-none focus:border-primary bg-transparent px-0 py-2 text-black"
                     />
                 </label>
             </div>
+
             <button
                 type="submit"
                 class="mt-8 btn w-full bg-cyan-300 hover:bg-cyan-400 border-0 rounded-none font-montserrat text-white text-base tracking-wide"
-                >CRÉER UN COMPTE</button
             >
-            <p id="status" class="mt-2 text-center text-red-500"></p>
-            <div class="mt-8 text-center text-base">
-                Déjà membre ? <a href="/login" class="underline ml-2"
-                    >SE CONNECTER</a
-                >
+                CRÉER UN COMPTE
+            </button>
+
+            <p id="status" class="mt-2 text-center"></p>
+
+            <div class="mt-4 text-center text-base">
+                Déjà membre ?
+                <a href="/login" class="underline ml-2">SE CONNECTER</a>
             </div>
         </form>
     </div>
 </Layout>
+
 <script>
     //@ts-nocheck
     const form = document.getElementById("registerForm");
     const status = document.getElementById("status");
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const formData = new FormData(form);
+
+        const password = formData.get("password");
+        const confirmPassword = formData.get("confirm_password");
+
+        // Vérification côté client que les mots de passe correspondent
+        if (password !== confirmPassword) {
+            status.textContent = "❌ Les mots de passe ne correspondent pas";
+            status.classList.remove("text-green-600");
+            status.classList.add("text-red-500");
+            return;
+        }
+
         const data = {
             prenom: formData.get("prenom"),
             nom: formData.get("nom"),
             email: formData.get("email"),
-            password: formData.get("password"),
-            passwordConfirm: formData.get("password"), // si tu utilises la validation côté PB
+            password: password,
+            passwordConfirm: confirmPassword,
         };
-        const res = await fetch("/api/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
-        if (res.ok) {
-            status.textContent =
-                "✅ Compte créé ! Vérifiez votre email pour valider votre compte.";
-            status.classList.remove("text-red-500");
-            status.classList.add("text-green-600");
-            form.reset();
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 1300);
-        } else {
-            const error = await res.json();
-            status.textContent =
-                error?.message || "Erreur, veuillez réessayer.";
-            status.classList.remove("text-green-600");
+
+        // Désactive le bouton pendant l'envoi
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Création en cours...";
+
+        try {
+            const res = await fetch("/api/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+                credentials: "include",
+            });
+
+            if (res.ok) {
+                status.textContent =
+                    "✅ Compte créé avec succès ! Redirection...";
+                status.classList.remove("text-red-500");
+                status.classList.add("text-green-600");
+                form.reset();
+
+                // Redirige vers la page d'accueil après 1 seconde
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1000);
+            } else {
+                const error = await res.json();
+                status.textContent = `❌ ${error?.message || "Erreur lors de la création du compte"}`;
+                status.classList.remove("text-green-600");
+                status.classList.add("text-red-500");
+
+                // Réactive le bouton
+                submitBtn.disabled = false;
+                submitBtn.textContent = "CRÉER UN COMPTE";
+            }
+        } catch (err) {
+            status.textContent = "❌ Erreur de connexion, veuillez réessayer";
             status.classList.add("text-red-500");
+            console.error(err);
+
+            // Réactive le bouton
+            submitBtn.disabled = false;
+            submitBtn.textContent = "CRÉER UN COMPTE";
         }
     });
 </script>

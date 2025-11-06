@@ -3,18 +3,18 @@ const user = Astro.locals.user;
 ---
 
 <header>
-    <div class="z-1 navbar bg-transparent flex items-center py-8 gap-2">
-        <a href="/">
+    <div class="z-1 navbar bg-transparent flex flex-col sm:flex-row items-center py-4 sm:py-8 gap-4 sm:gap-2">
+        <a href="/" class="flex-shrink-0">
             <img
                 src="/src/assets/images/logo_header.svg"
                 alt="Logo"
-                class="items-center h-12 mb-2"
+                class="h-10 sm:h-12"
             />
         </a>
 
-        <div class="w-full flex justify-between items-center mt-2">
-            <div></div>
-            <ul class="flex gap-6 px-1 text-base">
+        <div class="w-full flex justify-center sm:justify-between items-center">
+            <div class="hidden sm:block"></div>
+            <ul class="flex flex-wrap justify-center gap-4 sm:gap-6 text-sm sm:text-base">
                 <li><a href="/generator">Générateur</a></li>
                 <li><a href="/galerie">Galerie</a></li>
                 {user ? (
@@ -31,7 +31,7 @@ const user = Astro.locals.user;
                         <img
                             src="/src/assets/images/cart.svg"
                             alt="Panier"
-                            class="h-7 w-7"
+                            class="h-6 w-6 sm:h-7 sm:w-7"
                         />
                     </a>
                 </li>

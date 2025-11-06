@@ -7,12 +7,12 @@ const options = [
 ];
 ---
 
-<div class="flex gap-4 px-8 my-4">
+<div class="flex flex-wrap justify-center gap-2 sm:gap-4 px-4 sm:px-8 my-4">
     {
         options.map((opt) => (
             <a
                 href={`?filtre=${opt.value}`}
-                class={`font-montserrat text-sm btn btn-sm min-w-[140px] min-h-[42px] ${
+                class={`font-montserrat text-xs sm:text-sm btn btn-sm w-full sm:w-auto sm:min-w-[140px] min-h-[38px] sm:min-h-[42px] ${
                     actif === opt.value
                         ? "btn-primary text-white"
                         : "btn-outline"

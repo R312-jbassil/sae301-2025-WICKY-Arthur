@@ -11,24 +11,29 @@ const typeFiltre = url.searchParams.get("filtre") ?? "toutes";
 let records = [];
 
 if (typeFiltre === "toutes") {
-    // Récupère toutes les lunettes des deux collections
     const modelesBase = await pb.collection("modeles").getFullList();
     const modelesIA = await pb.collection("ModeleIa").getFullList();
     records = [...modelesBase, ...modelesIA];
 } else if (typeFiltre === "base") {
-    // Uniquement les modèles de base
     records = await pb.collection("modeles").getFullList();
 } else if (typeFiltre === "ia") {
-    // Uniquement les modèles générés par IA
     records = await pb.collection("ModeleIa").getFullList();
 }
 ---
 
 <Layout>
     <Header />
-    <h1 class="text-3xl p-8 pb-4">Nos Modèles de Lunettes</h1>
-    <div class="pb-16"><FiltreLunettes actif={typeFiltre} /></div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-8">
+    <h1
+        class="text-2xl sm:text-3xl font-bold px-4 sm:px-8 py-4 sm:py-8 pb-2 sm:pb-4"
+    >
+        Nos Modèles de Lunettes
+    </h1>
+    <div class="pb-8 sm:pb-16">
+        <FiltreLunettes actif={typeFiltre} />
+    </div>
+    <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-4 sm:px-8 pb-8"
+    >
         {
             records.map((record) => (
                 <Card
